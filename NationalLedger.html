@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>National Ledger of Deferred Obligations — United States</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0c10; --bg2:#0f1218; --bg3:#161a24; --bg4:#1e2330;
+  --border:#1e2636; --border2:#2a3347;
+  --red:#a01818; --red-lit:#c0392b; --orange:#c47c14;
+  --green:#1e7c45; --green-lit:#27ae60;
+  --gold:#c9a84c; --gold-dim:#6b5520;
+  --text:#e8e3d8; --text-mid:#8a8478; --text-dim:#4a4840;
+  --mono:'IBM Plex Mono',monospace; --serif:'IBM Plex Serif',Georgia,serif; --display:'Bebas Neue',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:15px;line-height:1.6;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.015) 2px,rgba(0,0,0,.015) 4px);}
+
+/* ── TOPBAR ── */
+#topbar{position:sticky;top:0;z-index:500;background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:.5rem 1.25rem;display:flex;align-items:center;gap:.875rem;flex-wrap:wrap;position:relative;}
+#topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red-lit),var(--gold),transparent 55%);}
+.tb-logo{font-family:var(--display);font-size:1rem;letter-spacing:.04em;color:var(--gold);}
+.tb-sub{font-family:var(--mono);font-size:.55rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;}
+.tb-sep{width:1px;height:22px;background:var(--border2);}
+.tb-flag{font-family:var(--mono);font-size:.56rem;color:var(--red-lit);padding:.15rem .45rem;
+  border:1px solid var(--red);border-radius:2px;text-transform:uppercase;letter-spacing:.1em;}
+#keyBtn{margin-left:auto;padding:.2rem .55rem;background:transparent;border:1px solid var(--border2);
+  color:var(--text-dim);font-family:var(--mono);font-size:.6rem;cursor:pointer;border-radius:2px;}
+#keyBtn:hover{border-color:var(--gold);color:var(--gold);}
+#keyBtn.has-key{border-color:var(--green-lit);color:var(--green-lit);}
+
+/* ── MASTHEAD ── */
+.mast{padding:2.5rem 1.5rem 1.75rem;max-width:1100px;margin:0 auto;}
+.mast-eye{font-family:var(--mono);font-size:.6rem;color:var(--red-lit);text-transform:uppercase;letter-spacing:.18em;margin-bottom:.5rem;}
+.mast-h1{font-family:var(--display);font-size:clamp(2rem,5vw,3.8rem);color:var(--text);
+  letter-spacing:.03em;line-height:1;margin-bottom:.6rem;}
+.mast-h1 span{color:var(--gold);}
+.mast-sub{font-size:.9rem;color:var(--text-mid);font-style:italic;max-width:680px;line-height:1.75;margin-bottom:1.25rem;}
+.mast-note{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);
+  background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--red-lit);
+  padding:.6rem .875rem;border-radius:0 3px 3px 0;line-height:1.65;max-width:720px;}
+.mast-note strong{color:var(--text-mid);}
+
+/* ── AGG STRIP ── */
+.agg{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:.875rem 1.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
+.agg-n{font-family:var(--display);font-size:1.5rem;color:var(--orange);line-height:1;}
+.agg-l{font-family:var(--mono);font-size:.55rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-top:.1rem;}
+.agg-bar{flex:1;min-width:180px;}
+.agg-foot{font-family:var(--mono);font-size:.57rem;color:var(--text-dim);font-style:italic;margin-left:auto;max-width:300px;text-align:right;}
+
+/* ── VOID STRIP ── */
+.void-strip{background:rgba(160,24,24,.07);border-bottom:1px solid rgba(160,24,24,.2);
+  padding:.5rem 1.5rem;font-family:var(--mono);font-size:.6rem;
+  display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.void-lbl{color:var(--red-lit);text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;}
+.trig-chip{padding:.15rem .45rem;background:rgba(196,124,20,.14);color:var(--orange);
+  border:1px solid rgba(196,124,20,.3);border-radius:2px;white-space:nowrap;}
+
+/* ── GRID ── */
+.grid-wrap{max-width:1100px;margin:0 auto;padding:1.25rem 1.5rem;}
+.grid-hdr{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.15em;
+  color:var(--text-dim);margin-bottom:.875rem;display:flex;align-items:center;gap:.75rem;}
+.grid-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+#catGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;}
+
+.cat-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  padding:1rem 1.125rem;cursor:pointer;transition:all .2s;overflow:hidden;position:relative;}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border);}
+.cat-card:hover{background:var(--bg3);transform:translateY(-2px);}
+.cat-card.cat-warn::before{background:var(--orange);}
+.cat-card.cat-warn{border-color:rgba(196,124,20,.35);}
+
+.cat-top{display:flex;align-items:center;gap:.4rem;margin-bottom:.35rem;}
+.cat-icon{font-size:1.05rem;}
+.cat-code{font-family:var(--mono);font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;}
+.cat-status-chip{margin-left:auto;font-family:var(--mono);font-size:.49rem;padding:.1rem .3rem;
+  border-radius:2px;text-transform:uppercase;letter-spacing:.06em;}
+.stat-pub{background:rgba(30,124,69,.12);color:var(--green-lit);border:1px solid rgba(30,124,69,.28);}
+.stat-partial{background:rgba(196,124,20,.12);color:var(--orange);border:1px solid rgba(196,124,20,.28);}
+
+.cat-name{font-family:var(--serif);font-size:.88rem;font-weight:600;margin-bottom:.3rem;}
+.cat-fig{font-family:var(--display);font-size:1.35rem;letter-spacing:.02em;line-height:1;margin-bottom:.3rem;}
+.cat-live{font-family:var(--mono);font-size:.57rem;color:var(--text-dim);
+  margin-bottom:.3rem;display:flex;align-items:center;gap:.35rem;}
+.cat-live.live-loaded{color:var(--green-lit);}
+.live-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green-lit);flex-shrink:0;}
+.pulsing{animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.live-src{font-size:.58rem;color:var(--text-dim);}
+.cat-spark{margin:.3rem 0;}
+.cat-foot{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-family:var(--mono);font-size:.57rem;color:var(--text-dim);}
+.cat-agency-chip{background:var(--bg3);padding:.1rem .3rem;border-radius:2px;border:1px solid var(--border2);}
+.cat-void{font-family:var(--mono);font-size:.55rem;color:var(--red-lit);margin-top:.4rem;
+  padding:.18rem .4rem;background:rgba(160,24,24,.08);border-radius:2px;}
+
+/* ── GLOBAL AI ── */
+#globalAiWrap{max-width:1100px;margin:0 auto;padding:.875rem 1.5rem 1.5rem;}
+.gai-inner{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem 1.25rem;}
+.gai-hdr{font-family:var(--mono);font-size:.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;}
+.gai-row{display:flex;gap:.5rem;}
+#globalQ{flex:1;padding:.5rem .875rem;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--serif);font-size:.88rem;border-radius:3px;outline:none;resize:none;}
+#globalQ::placeholder{color:var(--text-dim);}
+#globalQ:focus{border-color:var(--gold);}
+.ai-btn{padding:.4rem .875rem;background:var(--gold-dim);color:var(--gold);font-family:var(--mono);
+  font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  border:1px solid var(--gold-dim);border-radius:3px;cursor:pointer;white-space:nowrap;}
+.ai-btn:hover{background:var(--gold);color:var(--bg);}
+#globalOut{margin-top:.5rem;}
+
+/* ── DETAIL PANEL ── */
+#detailPanel{display:none;max-width:1100px;margin:0 auto;padding:1rem 1.5rem 3rem;}
+.back-btn{background:none;border:none;font-family:var(--mono);font-size:.65rem;color:var(--text-dim);
+  cursor:pointer;padding:.3rem 0;margin-bottom:1rem;display:inline-flex;align-items:center;gap:.3rem;}
+.back-btn:hover{color:var(--gold);}
+.det-hero{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.25rem;margin-bottom:.875rem;}
+.det-top{display:flex;align-items:flex-start;gap:.875rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.det-meta{font-family:var(--mono);font-size:.6rem;color:var(--text-dim);margin-top:.25rem;line-height:1.6;}
+.det-legal{font-family:var(--mono);font-size:.6rem;color:var(--text-dim);margin-top:.3rem;line-height:1.6;
+  border-top:1px solid var(--border);padding-top:.3rem;margin-top:.5rem;}
+.det-lbl{color:var(--text-mid);}
+.live-row{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);
+  margin-top:.5rem;display:flex;align-items:center;gap:.4rem;}
+.live-row.live-loaded{color:var(--green-lit);}
+
+.det-current-acc{background:var(--bg3);border:1px solid var(--border);border-radius:4px;
+  padding:.875rem 1rem;margin-bottom:.75rem;}
+.det-acc-hdr{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-mid);margin-bottom:.4rem;}
+.det-current-acc p{font-size:.82rem;color:var(--text-mid);line-height:1.7;}
+
+.det-missing{background:rgba(160,24,24,.07);border:1px solid rgba(160,24,24,.2);
+  border-radius:4px;padding:.875rem 1rem;margin-bottom:.875rem;}
+.det-miss-hdr{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--red-lit);margin-bottom:.4rem;}
+.det-missing p{font-size:.82rem;color:var(--text-mid);line-height:1.7;}
+
+.det-total{background:var(--bg3);border:1px solid var(--border);border-radius:4px;
+  padding:.875rem 1rem;margin-bottom:.875rem;}
+
+.entries-hdr{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.15em;
+  color:var(--text-dim);margin:.875rem 0 .5rem;display:flex;align-items:center;gap:.75rem;}
+.entries-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+.entries-list{display:flex;flex-direction:column;gap:.625rem;margin-bottom:.875rem;}
+
+.entry{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:.875rem 1rem;}
+.entry-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.875rem;margin-bottom:.35rem;flex-wrap:wrap;}
+.entry-label{font-family:var(--serif);font-size:.9rem;font-weight:600;color:var(--text);}
+.entry-val{font-family:var(--display);font-size:1.05rem;letter-spacing:.02em;flex-shrink:0;}
+.val-unknown{color:var(--orange) !important;font-size:.82rem;}
+.entry-unit{font-family:var(--mono);font-size:.57rem;color:var(--text-dim);margin-bottom:.3rem;}
+.entry-body-row{font-family:var(--mono);font-size:.6rem;color:var(--text-dim);line-height:1.55;margin-bottom:.18rem;}
+.ebr-lbl{color:var(--text-mid);}
+.entry-note{font-family:var(--mono);font-size:.6rem;color:var(--orange);line-height:1.55;
+  margin:.35rem 0;background:rgba(196,124,20,.07);padding:.3rem .5rem;border-radius:2px;}
+.entry-cert-row{margin-top:.35rem;}
+.cert-chip{font-family:var(--mono);font-size:.55rem;padding:.1rem .35rem;border-radius:2px;
+  text-transform:uppercase;letter-spacing:.07em;}
+.cert-y{background:rgba(30,124,69,.12);color:var(--green-lit);border:1px solid rgba(30,124,69,.25);}
+.cert-n{background:rgba(196,124,20,.1);color:var(--orange);border:1px solid rgba(196,124,20,.22);}
+
+/* ── ACCOUNTABILITY GAP ── */
+.acc-gap{background:rgba(160,24,24,.06);border:1px solid rgba(160,24,24,.2);
+  border-radius:4px;padding:.875rem 1rem;margin:.875rem 0;}
+.acc-gap-header{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--red-lit);margin-bottom:.5rem;}
+.acc-gap-row{display:flex;gap:.5rem;font-family:var(--mono);font-size:.6rem;line-height:1.6;
+  margin-bottom:.3rem;flex-wrap:wrap;}
+.acc-label{color:var(--text-mid);flex-shrink:0;min-width:120px;}
+.acc-void{color:var(--red-lit);}
+
+/* ── GROWTH ROW ── */
+.growth-row{background:var(--bg3);border:1px solid var(--border);border-radius:4px;
+  padding:.75rem 1rem;margin:.75rem 0;}
+.growth-row.growth-warn{background:rgba(196,124,20,.07);border-color:rgba(196,124,20,.3);}
+.growth-label{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);margin-bottom:.25rem;}
+.growth-note{font-family:var(--mono);font-size:.6rem;color:var(--orange);line-height:1.6;margin-top:.3rem;}
+
+/* ── AI BLOCK ── */
+.ai-block{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:1.25rem;}
+.ai-block-hdr{padding:.55rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);
+  font-family:var(--mono);font-size:.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;}
+.ai-row{display:flex;gap:.5rem;padding:.875rem 1rem;align-items:flex-start;}
+.ai-ta{flex:1;padding:.5rem .875rem;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--serif);font-size:.88rem;border-radius:3px;
+  outline:none;resize:none;min-height:44px;}
+.ai-ta:focus{border-color:var(--gold);}
+.quick-row{padding:.4rem 1rem .875rem;display:flex;flex-wrap:wrap;gap:.35rem;}
+.quick-btn{font-family:var(--mono);font-size:.57rem;padding:.2rem .45rem;background:var(--bg3);
+  border:1px solid var(--border2);color:var(--text-dim);border-radius:2px;cursor:pointer;text-align:left;}
+.quick-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
+#aiOut,#globalOut{padding:0 1rem .875rem;}
+.ai-res{font-size:.82rem;line-height:1.75;color:var(--text-mid);}
+.ai-res h3{font-family:var(--mono);font-size:.62rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.1em;margin:.875rem 0 .25rem;}
+.ai-res h3:first-child{margin-top:0;}
+.ai-res p{margin-bottom:.6em;}
+.ai-res strong{color:var(--text);}
+.ai-res ul{padding-left:1rem;margin-bottom:.6em;}
+.ai-res li::marker{color:var(--gold);}
+.ai-res .fig{color:var(--red-lit);}
+.ai-err{font-family:var(--mono);font-size:.68rem;color:var(--red-lit);padding:.5rem;}
+
+.loading{display:flex;align-items:center;gap:.5rem;padding:.875rem;
+  font-family:var(--mono);font-size:.68rem;color:var(--text-dim);}
+.spin{width:13px;height:13px;border:2px solid var(--border2);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── KEY MODAL ── */
+#keyModal{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.km{background:var(--bg2);border:1px solid var(--border2);border-top:2px solid var(--gold);
+  border-radius:4px;padding:1.75rem;max-width:430px;width:90%;}
+.km-eye{font-family:var(--mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:.35rem;}
+.km-title{font-family:var(--display);font-size:1.35rem;letter-spacing:.02em;margin-bottom:.4rem;}
+.km-sub{font-size:.78rem;color:var(--text-mid);line-height:1.65;margin-bottom:1rem;}
+.km-sub a{color:var(--gold);text-decoration:none;}
+#keyInp{width:100%;padding:.5rem .875rem;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--mono);font-size:.72rem;border-radius:3px;outline:none;margin-bottom:.5rem;}
+#keyInp:focus{border-color:var(--gold);}
+.km-btns{display:flex;gap:.5rem;margin-bottom:.75rem;}
+.km-save{flex:1;padding:.5rem;background:var(--gold-dim);border:1px solid var(--gold-dim);
+  color:var(--gold);font-family:var(--mono);font-size:.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;border-radius:3px;cursor:pointer;}
+.km-save:hover{background:var(--gold);color:var(--bg);}
+.km-skip{padding:.5rem .875rem;background:transparent;border:1px solid var(--border2);
+  color:var(--text-dim);font-family:var(--mono);font-size:.62rem;cursor:pointer;border-radius:3px;}
+.km-note{font-family:var(--mono);font-size:.58rem;color:var(--text-dim);line-height:1.5;}
+
+.footer{border-top:1px solid var(--border);padding:.875rem 1.5rem;margin-top:2rem;
+  font-family:var(--mono);font-size:.56rem;color:var(--text-dim);line-height:1.8;}
+.footer strong{color:var(--text-mid);}
+
+@media(max-width:600px){
+  .agg{gap:1rem;} .mast{padding:1.5rem 1rem;} #catGrid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div>
+    <div class="tb-logo">⚖ NATIONAL LEDGER OF DEFERRED OBLIGATIONS</div>
+    <div class="tb-sub">United States · As of April 2026 · Unofficial aggregate — no official equivalent exists</div>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-flag">No Enforcement Mechanism</div>
+  <button id="keyBtn" onclick="showKeyModal()" title="Add a free Anthropic API key to search and research any obligation in depth">🔍 Unlock AI Research</button>
+</div>
+
+<div class="mast">
+  <div class="mast-eye">What the government owes — and does not account for</div>
+  <h1 class="mast-h1">THE DEBT<br>WE <span>DON'T</span> PUBLISH</h1>
+  <p class="mast-sub">The United States government owes obligations it does not record in a single place, does not require any official to aggregate, and has no binding legal mechanism to address. The individual pieces are published — scattered across dozens of agency reports, on different schedules, with different methodologies, and no requirement that anyone add them up. This document does.</p>
+  <div class="mast-note">
+    <strong>These figures are not secret.</strong> They come from CBO, SSA, NOAA, USGS, EPA, GAO, BIA, and the U.S. Treasury —
+    official government sources. What does not exist is any law requiring them to be published together, any mechanism requiring
+    Congress to respond when they grow, or any official bearing personal accountability for their accuracy in aggregate.
+    The numbers are documented. The accountability is not.
+  </div>
+</div>
+
+<div class="agg">
+  <div>
+    <div class="agg-n" id="aggTotal">—</div>
+    <div class="agg-l">Documented (partial)</div>
+  </div>
+  <div>
+    <div class="agg-n" id="aggGdp">—</div>
+    <div class="agg-l">% of GDP</div>
+  </div>
+  <div class="agg-bar" id="aggBar"></div>
+  <div class="agg-foot" id="aggNote"></div>
+</div>
+
+<div class="void-strip">
+  <span class="void-lbl">Growing faster than response capacity:</span>
+  <div id="triggerStrip"></div>
+</div>
+
+<div id="globalAiWrap">
+  <div class="grid-wrap" style="padding-bottom:.5rem">
+    <div class="gai-inner">
+      <div class="gai-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem">
+      <span>🔍 Search — Agency reports, current law, accountability gaps</span>
+      <span id="ledger-key-note" style="font-size:.56rem;color:var(--text-dim)">
+        <span id="ledger-key-status"></span>
+      </span>
+    </div>
+      <div class="gai-row">
+        <textarea id="globalQ" rows="2"
+          placeholder="Ask about any deferred obligation: what it is, what law governs it, what Congress has done, what enforcement exists…"></textarea>
+        <button class="ai-btn" onclick="runGlobalAI()">Search →</button>
+      </div>
+      <div id="globalOut"></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <div class="grid-hdr">Five Categories of Deferred Obligation</div>
+  <div id="catGrid"></div>
+</div>
+
+<div id="detailPanel"></div>
+
+<div class="footer">
+  <strong>Sources:</strong>
+  U.S. Treasury FiscalData API (live) · USGS National Water Information System (live) · USASpending.gov (live) ·
+  SSA Board of Trustees Report 2024 · Medicare Trustees Report 2024 · CBO Long-Term Budget Outlook 2024 ·
+  ASCE 2021 Infrastructure Report Card · NOAA State of the Climate 2024 · EPA Superfund Program 2023 ·
+  GAO Reports 2021–2024 · BIA Water Rights Program 2023 · Bureau of Reclamation 2024 ·
+  Indian Health Service 2024 · Urban Indian Health Institute 2018 · DOD PFAS Cleanup Plan 2023 ·
+  Cobell v. Salazar consent decree 2010 · United States v. Sioux Nation (1980)<br>
+  <strong>AI search:</strong> Anthropic Claude API, user-provided key, live web search. Not affiliated with any government agency.
+  This is an unofficial aggregate of publicly available government data. No figures have been modified.
+</div>
+
+<div id="keyModal">
+  <div class="km">
+    <div class="km-eye">🔑 API Access</div>
+    <div class="km-title">Unlock AI Research</div>
+    <div class="km-sub">All five obligation categories in this Ledger are fully visible without a key — the data is already here. Adding an Anthropic API key unlocks the AI research layer: live searches for current status, recent developments, and enforcement gaps on any category.<br><br>Keys are free to generate at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>. Your key is stored in your browser only.</div>
+    <input type="password" id="keyInp" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false">
+    <div class="km-btns">
+      <button class="km-save" onclick="saveKey()">Save & Continue →</button>
+      <button class="km-skip" onclick="closeKeyModal()">Continue Without AI →</button>
+    </div>
+    <div class="km-note">🔒 Stored in your browser only. Never shared.</div>
+  </div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// NATIONAL LEDGER OF DEFERRED OBLIGATIONS
+// Current obligations under existing US law — as of April 2026
+// Sources: CBO, SSA Trustees Report 2024, ASCE 2021 Report Card,
+//          NOAA 2024, USGS NWIS, EPA, BIA, Treasury FY2025
+// ═══════════════════════════════════════════════════════════════════
+
+const LEDGER_META = {
+  status: 'UNOFFICIAL — No official equivalent exists',
+  publishDate: 'April 12, 2026',
+  gdp: 29350,           // BEA Q4 2024 annualized, $B
+  gdpSource: 'Bureau of Economic Analysis, Q4 2024',
+  accountability: 'NONE — No single mechanism requires Congress to acknowledge, respond to, or address aggregate deferred obligations.',
+  note: 'The federal government publishes components of these figures across dozens of separate agency reports. No law requires them to be aggregated, published together, or acted upon. This document does that aggregation. The numbers are not in dispute. The silence around them is.'
+};
+
+const LEDGER_CATEGORIES = [
+  // ── CAT I — FISCAL ──────────────────────────────────────
+  {
+    id: 'fiscal',
+    code: 'CAT-I',
+    name: 'Fiscal Obligations',
+    icon: '🏦',
+    color: '#c0392b',
+    colorDim: 'rgba(192,57,43,0.15)',
+    unit: 'USD',
+    responsible: [
+      'Office of Management and Budget',
+      'Social Security Administration',
+      'Congressional Budget Office',
+      'U.S. Treasury'
+    ],
+    currentAccountability: 'Each agency publishes its own figures in separate reports on separate schedules. No mechanism requires Congress to respond when the aggregate grows. No individual official bears personal liability for the accuracy of projections. The debt ceiling debate treats the number as a political tool, not an accounting obligation.',
+    legalBasis: 'Article I, Section 8 (power to borrow); 14th Amendment, Section 4 (validity of public debt); Social Security Act (42 U.S.C. §401); Medicare Act (42 U.S.C. §1395)',
+    whatIsMissing: 'No law requires the federal government to publish a unified balance sheet. No official faces consequences for projections that prove false. Congress can — and routinely does — receive CBO projections showing insolvency trajectories and take no action.',
+    status: 'PUBLISHED — fragmented across agencies',
+    updateSchedule: 'Quarterly (debt) + Annual (SSA/Medicare trustees reports)',
+    total: 113800,
+    trend: [89400, 94600, 99200, 105800, 113800],
+    trendYears: [2021, 2022, 2023, 2024, 2025],
+    liveApi: {
+      endpoint: 'https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/debt_to_penny?fields=record_date,tot_pub_debt_out_amt&sort=-record_date&limit=1',
+      label: 'National Debt (live — Treasury FiscalData)',
+      transform: v => `$${(parseFloat(v)/1e12).toFixed(2)}T`
+    },
+    entries: [
+      {
+        label: 'Outstanding National Debt',
+        value: 36200,
+        unit: '$B',
+        source: 'U.S. Treasury FiscalData, 2025',
+        certifyingBody: 'Bureau of the Fiscal Service, U.S. Treasury',
+        currentStatus: 'Published daily at fiscaldata.treasury.gov. This is the only Ledger figure the US government publishes in real time.',
+        liveField: 'national_debt',
+        certified: true,
+        note: ''
+      },
+      {
+        label: 'Unfunded Social Security Obligations (75-year)',
+        value: 25800,
+        unit: '$B',
+        source: 'SSA Board of Trustees Annual Report 2024, Table VI.F1',
+        certifyingBody: 'Social Security Administration',
+        currentStatus: 'Published annually. Congress receives this report every year. There is no mechanism requiring any response.',
+        certified: true,
+        note: 'The trustees have warned of insolvency by 2035 in every report since 2018. Congress has not passed solvency legislation. The warning has no enforcement mechanism.'
+      },
+      {
+        label: 'Unfunded Medicare Obligations (75-year)',
+        value: 40900,
+        unit: '$B',
+        source: 'Medicare Board of Trustees Annual Report 2024',
+        certifyingBody: 'Centers for Medicare & Medicaid Services',
+        currentStatus: 'Published annually. Same structural accountability void as Social Security.',
+        certified: true,
+        note: 'Most volatile category — highly sensitive to healthcare cost assumptions. Range: $28T (optimistic) to $55T (pessimistic). Congress has received this data for 30 years.'
+      },
+      {
+        label: 'Federal Employee and Military Pension Obligations (unfunded)',
+        value: 5600,
+        unit: '$B',
+        source: 'GAO, Federal Employee Retirement Systems, 2023',
+        certifyingBody: 'Office of Personnel Management / Dept. of Defense',
+        currentStatus: 'Published by OPM and DOD separately. No unified figure exists in official government reporting.',
+        certified: false,
+        note: 'Actuarial present value of projected benefits minus plan assets. The US government does not publish this as a headline figure.'
+      },
+      {
+        label: 'Deferred Federal Infrastructure Maintenance',
+        value: 5300,
+        unit: '$B',
+        source: 'ASCE 2021 Infrastructure Report Card; CBO Federal Infrastructure Report 2023',
+        certifyingBody: 'Army Corps of Engineers / Federal Highway Administration / various',
+        currentStatus: 'Published piecemeal by agency. No law requires aggregate publication or mandated remediation timeline.',
+        certified: false,
+        note: 'The Infrastructure Investment and Jobs Act (2021) allocated $1.2T over 10 years — significant but less than a quarter of the documented backlog.'
+      }
+    ],
+    accountability_gap: {
+      whoPublishes: 'Treasury (debt), SSA (SS obligations), CMS (Medicare), OPM (pensions), ASCE (infrastructure) — all separately.',
+      whoAggregates: 'Nobody. No federal agency publishes a unified balance sheet.',
+      consequences_of_growth: 'None mandated by law. Congress may receive a CBO report and schedule no hearings. No official is fired, fined, or sanctioned.',
+      lastCongressionalAction: 'Debt ceiling negotiations 2023 (Fiscal Responsibility Act). No action taken on unfunded entitlement obligations.'
+    },
+    triggers: {
+      annualGrowth: { threshold: 3, currentGrowth: 7.6, triggered: true }
+    }
+  },
+
+  // ── CAT II — CLIMATE ─────────────────────────────────────
+  {
+    id: 'climate',
+    code: 'CAT-II',
+    name: 'Climate Obligations',
+    icon: '🌡️',
+    color: '#e67e22',
+    colorDim: 'rgba(230,126,34,0.15)',
+    unit: 'multi',
+    responsible: [
+      'NOAA', 'EPA', 'Army Corps of Engineers', 'Dept. of Energy', 'OMB'
+    ],
+    currentAccountability: 'NOAA publishes annual climate assessments. EPA publishes emissions inventories. The Army Corps publishes infrastructure risk assessments. OMB began publishing climate risk reports in 2021. None of these reports carry enforcement mechanisms. The federal government has no legal obligation to act on its own published projections.',
+    legalBasis: 'Clean Air Act (42 U.S.C. §7401); National Environmental Policy Act; Global Change Research Act (1990); Paris Agreement (non-binding); Executive Order 14008 (2021)',
+    whatIsMissing: 'Congress has never passed comprehensive climate legislation creating a binding federal obligation to address committed warming. The EPA\'s authority to regulate greenhouse gases under the Clean Air Act was significantly narrowed by West Virginia v. EPA (2022). No official is legally required to publish or respond to a dollar figure for committed climate costs.',
+    status: 'PARTIALLY PUBLISHED — no unified obligation figure exists',
+    updateSchedule: 'Annual (NOAA) + periodic (EPA/Army Corps)',
+    total: 14700,
+    trend: [9200, 10100, 11400, 12900, 14700],
+    trendYears: [2021, 2022, 2023, 2024, 2025],
+    entries: [
+      {
+        label: 'Committed Warming (locked in by existing emissions)',
+        value: 1.5,
+        unit: '°C above pre-industrial — irreversible',
+        source: 'NOAA 2024 State of the Climate; IPCC AR6 Working Group I (2021)',
+        certifyingBody: 'NOAA / National Centers for Environmental Information',
+        currentStatus: 'Published. The US government acknowledges this figure in official scientific reports. No federal law requires a response to it.',
+        certified: true,
+        note: 'An additional 0.3–0.5°C of warming is committed regardless of immediate cessation of all global emissions. This is physical reality, not a projection.'
+      },
+      {
+        label: 'Federal Coastal Infrastructure at Documented Risk (25-year)',
+        value: 1100,
+        unit: '$B',
+        source: 'Army Corps of Engineers, North Atlantic Coast Study; NOAA SLR projections 2022',
+        certifyingBody: 'Army Corps of Engineers',
+        currentStatus: 'Published in agency reports. No unified federal coastal infrastructure liability figure exists in official government accounting.',
+        certified: false,
+        note: 'Does not include state, local, or private infrastructure. The federal government insures and backstops much of the at-risk private infrastructure through NFIP.'
+      },
+      {
+        label: 'Adaptation Costs Already Unavoidable (25-year)',
+        value: 3800,
+        unit: '$B',
+        source: 'EPA Climate Change Impacts and Risk Analysis 2023; OMB Climate Risk Report 2024',
+        certifyingBody: 'EPA / OMB',
+        currentStatus: 'OMB began publishing climate risk reports under EO 14008 (Biden, 2021). EO 14008 was partially revoked by EO 14148 (Trump, 2025). Current publication status unclear.',
+        certified: false,
+        note: 'This figure represents adaptation spending already made unavoidable by past emissions — flood protection, drought infrastructure, heat response, emergency management scaling. It will be spent eventually. The question is whether it is planned or reactive.'
+      },
+      {
+        label: 'Federal Disaster Recovery Deferred Costs',
+        value: 4200,
+        unit: '$B',
+        source: 'FEMA National Risk Index 2023; GAO Disaster Recovery Reports 2022–2024',
+        certifyingBody: 'FEMA / GAO',
+        currentStatus: 'GAO has documented the growing cost of climate-linked disaster recovery across 8 reports since 2019. Congress has received each report. The FEMA fund is perpetually undercapitalized.',
+        certified: false,
+        note: 'GAO has placed federal disaster programs on its High Risk List since 2019, citing "fiscal exposure." Being on the High Risk List carries no enforcement mechanism.'
+      },
+      {
+        label: 'Agricultural Water Stress — Projected Productivity Loss (20-year)',
+        value: 5600,
+        unit: '$B',
+        source: 'USDA Economic Research Service 2023; Stanford Woods Institute 2022',
+        certifyingBody: 'USDA / USGS',
+        currentStatus: 'Published in academic and USDA research. No federal agency is required to publish or respond to a dollar figure for climate-driven agricultural loss.',
+        certified: false,
+        note: 'Primarily Midwest and Southwest. Ogallala component captured separately in Category III.'
+      }
+    ],
+    accountability_gap: {
+      whoPublishes: 'NOAA (physical science), EPA (emissions), Army Corps (infrastructure risk), OMB (some cost estimates) — all separately, on different schedules.',
+      whoAggregates: 'Nobody. No federal agency is required to publish aggregate committed climate costs.',
+      consequences_of_growth: 'None. West Virginia v. EPA (2022) constrained EPA\'s regulatory authority. No climate spending law creates mandatory appropriations triggered by published risk data.',
+      lastCongressionalAction: 'Inflation Reduction Act (2022): ~$369B in climate provisions over 10 years. Partially rolled back by executive action 2025.'
+    },
+    triggers: {
+      annualGrowth: { threshold: 3, currentGrowth: 13.9, triggered: true }
+    }
+  },
+
+  // ── CAT III — WATER ──────────────────────────────────────
+  {
+    id: 'water',
+    code: 'CAT-III',
+    name: 'Water Obligations',
+    icon: '💧',
+    color: '#2980b9',
+    colorDim: 'rgba(41,128,185,0.15)',
+    unit: 'multi',
+    responsible: [
+      'U.S. Geological Survey',
+      'Bureau of Reclamation',
+      'Bureau of Indian Affairs',
+      'Army Corps of Engineers'
+    ],
+    currentAccountability: 'USGS publishes annual groundwater monitoring data. Bureau of Reclamation manages Colorado River allocations. BIA administers tribal water rights. None of these agencies has the authority to force Congress to fund water infrastructure or honor tribal water rights. Data is published. Action is optional.',
+    legalBasis: 'Winters v. United States (1908) — reserved water rights; Colorado River Compact (1922); Safe Drinking Water Act; Reclamation Act of 1902; various tribal treaties',
+    whatIsMissing: 'No federal agency is required to publish a unified water obligation figure. The Winters Doctrine has been established law for 117 years; most tribal water rights remain unquantified. The Colorado River Compact was negotiated using anomalously wet-year data and has never been renegotiated despite documented overallocation. No mandatory response mechanism exists for aquifer depletion data.',
+    status: 'PARTIALLY PUBLISHED — depletion data live; obligation figures fragmented',
+    updateSchedule: 'Annual (USGS) + continuous monitoring',
+    liveApi: {
+      endpoint: 'https://waterservices.usgs.gov/nwis/gwlevels/?format=json&sites=382102100583401&period=P30D&siteType=GW',
+      label: 'Ogallala depth — KS representative well (live, USGS NWIS)',
+      transform: v => `${parseFloat(v).toFixed(1)} ft below surface`
+    },
+    entries: [
+      {
+        label: 'Ogallala Aquifer — Depletion at Current Rate',
+        value: null,
+        unit: 'Declining 1.3–3.0 ft/year in high-use areas — see note',
+        source: 'USGS National Water Census 2023; McGuire 2023; USGS NWIS (live)',
+        certifyingBody: 'U.S. Geological Survey',
+        currentStatus: 'Published annually by USGS. Live monitoring data available at waterservices.usgs.gov. No law requires any government response to published depletion data.',
+        liveField: 'ogallala_level',
+        certified: true,
+        note: 'Supports 30% of US groundwater irrigation. At current rates, high-use Kansas and Texas sectors become uneconomical within 25–50 years. There is no federal law requiring a response to USGS depletion data. States have primary jurisdiction. Kansas and Texas have passed some conservation laws. The aquifer crosses eight states with no unified management authority.'
+      },
+      {
+        label: 'Colorado River — Annual Overallocation',
+        value: 1200000,
+        unit: 'acre-feet/year over sustainable yield',
+        source: 'Bureau of Reclamation, Colorado River Basin Water Supply and Demand Study 2012, updated 2024',
+        certifyingBody: 'Bureau of Reclamation',
+        currentStatus: 'Published by Bureau of Reclamation. The 2023–2026 shortage tiers have been implemented — mandatory cuts to Arizona, Nevada, and Mexico. The fundamental overallocation has not been resolved.',
+        certified: true,
+        note: 'The 1922 Compact was apportioned on anomalously wet early 20th century data. Total legal allocations (18.5 MAF/year) exceed documented mean annual flow (12–13 MAF/year) by approximately 1.2–2 MAF annually, before accounting for climate-driven reductions. Seven states, Mexico, and 30 tribal nations hold allocations.'
+      },
+      {
+        label: 'Indigenous Winters Doctrine Water Rights — Unquantified Senior Rights',
+        value: null,
+        unit: 'Unquantified — senior rights established by law since 1908',
+        source: 'Winters v. United States (1908); Arizona v. California (1963); BIA Water Rights Program 2023',
+        certifyingBody: 'Bureau of Indian Affairs — quantification incomplete',
+        currentStatus: 'The Winters Doctrine has been established federal law for 117 years. The majority of tribal water rights have never been quantified. Water rights settlements require Congressional authorization. As of 2024, fewer than 40 of approximately 570 federally recognized tribes have completed water rights settlements.',
+        certified: false,
+        note: 'This is the longest-running unmet federal obligation in this Ledger. 117 years since Winters. The water rights exist in law. In most cases the water has been allocated to others in the interim. Quantification and settlement require Congress to act. Congress has settled fewer than 40 cases in 117 years.'
+      },
+      {
+        label: 'Federal Drinking Water Infrastructure Backlog',
+        value: 625,
+        unit: '$B',
+        source: 'EPA Drinking Water Infrastructure Needs Survey 2023',
+        certifyingBody: 'EPA',
+        currentStatus: 'Published by EPA every 4 years as required by the Safe Drinking Water Act. The Infrastructure Investment and Jobs Act (2021) allocated $55B for water infrastructure. Documented need: $625B over 20 years.',
+        certified: true,
+        note: 'Flint, Michigan (2014–2019) and Jackson, Mississippi (2022) are documented instances of federal failure to address this backlog. Tribal water systems are among the most severely underfunded — 48% of tribal water systems have infrastructure deficiencies according to the Indian Health Service.'
+      }
+    ],
+    accountability_gap: {
+      whoPublishes: 'USGS (depletion data), Bureau of Reclamation (river allocations), EPA (drinking water needs), BIA (tribal rights — partially).',
+      whoAggregates: 'Nobody. No federal agency publishes a unified water obligation figure.',
+      consequences_of_growth: 'None mandated. USGS publishes depletion data. States may or may not respond. The federal government has no mandatory response mechanism for aquifer depletion.',
+      lastCongressionalAction: 'Infrastructure Investment and Jobs Act 2021: $55B for water over 5 years — approximately 9% of documented 20-year need.'
+    },
+    triggers: {
+      annualGrowth: { threshold: 3, currentGrowth: 4.2, triggered: true }
+    }
+  },
+
+  // ── CAT IV — TREATY ──────────────────────────────────────
+  {
+    id: 'treaty',
+    code: 'CAT-IV',
+    name: 'Treaty Obligations to Indigenous Nations',
+    icon: '⚖️',
+    color: '#8e44ad',
+    colorDim: 'rgba(142,68,173,0.15)',
+    unit: 'multi',
+    responsible: [
+      'Bureau of Indian Affairs',
+      'Dept. of Interior',
+      'Dept. of Justice',
+      'Indian Health Service'
+    ],
+    currentAccountability: 'The federal government has a trust responsibility to tribal nations established in the Constitution (Article I, Section 8), hundreds of treaties, and centuries of case law. That trust responsibility is legally binding. Its fulfillment is not. Congress funds the BIA and IHS below documented need in every budget cycle. No law converts the trust responsibility into a mandatory appropriation. The obligations exist. The enforcement mechanism does not.',
+    legalBasis: 'U.S. Constitution Article I §8, Article VI (treaty supremacy clause); Winters v. United States (1908); trust responsibility doctrine (established by law and case law); individual treaties — 370+ ratified',
+    whatIsMissing: 'No law requires Congress to publish aggregate treaty obligation figures. The trust responsibility is legally established but judicially unenforceable for appropriations decisions — Congress holds plenary power over Indian affairs. Tribal nations can sue for specific breaches; they cannot compel appropriations.',
+    status: 'PARTIALLY PUBLISHED — trust responsibility acknowledged, fulfillment not measured',
+    updateSchedule: 'Annual (IHS, BIA) + case-by-case (treaty settlements)',
+    entries: [
+      {
+        label: 'Black Hills — Fort Laramie Treaty (1868)',
+        value: null,
+        unit: 'Disputed — see both figures',
+        source: 'United States v. Sioux Nation (1980); Oglala Sioux Nation legal position',
+        certifyingBody: 'Disputed — no agreed methodology',
+        currentStatus: 'The Supreme Court ruled in 1980 that the US illegally seized the Black Hills in violation of the 1868 treaty and awarded $102M (now worth ~$1.3B with interest). The Sioux Nation has refused the money for over 40 years. They seek land return. The money sits in the Treasury, unclaimed.',
+        certified: false,
+        note: 'Two figures exist under current law. Federal: $1.3B (awarded, unclaimed). Oglala Sioux: priceless — the Black Hills are not for sale. The Supreme Court has ruled. The obligation is acknowledged. Congress has not acted to fulfill it in any form acceptable to the Sioux Nation in 45 years.'
+      },
+      {
+        label: 'Federal Trust Fund Mismanagement — Cobell Basis',
+        value: 3400,
+        unit: '$B estimated total underpayment',
+        source: 'Cobell v. Salazar consent decree (2010); GAO follow-up 2022',
+        certifyingBody: 'Dept. of Interior (disputed)',
+        currentStatus: 'The $3.4B settlement in Cobell v. Salazar (2010) was explicitly characterized as partial — a practical resolution, not a full accounting. The federal government managed approximately 56 million acres of trust land for over a century without ever producing accurate accounts. The full figure has never been calculated.',
+        certified: false,
+        note: 'The settlement agreement language states it does not constitute an admission of liability for the full amount of trust mismanagement. GAO noted in 2022 that Interior has not completed the accounting reforms required by the settlement.'
+      },
+      {
+        label: 'Healthcare Treaty Obligations — Documented Funding Gap',
+        value: 48,
+        unit: '$B cumulative underfunding (2000–2024)',
+        source: 'Indian Health Service Budget Formulation 2024; National Congress of American Indians 2023',
+        certifyingBody: 'Indian Health Service / HHS',
+        currentStatus: 'IHS is required by treaty and statute to provide healthcare to eligible tribal members. It is funded at approximately 60 cents on the dollar relative to documented need, in every fiscal year. Congress receives IHS budget justifications documenting the gap annually.',
+        certified: true,
+        note: 'IHS funding per capita is approximately one-third of federal per-capita healthcare spending for federal employees. This is not a resource allocation choice made in ignorance — the gap is documented and published every budget cycle.'
+      },
+      {
+        label: 'Documented Land Cessions — Historical Uncompensated Transfers',
+        value: null,
+        unit: 'Partially quantified — ICC awards $1.3B; full estimate $350B+',
+        source: 'Indian Claims Commission 1946–1978; academic literature (Dunbar-Ortiz 2014; Pommersheim 2009)',
+        certifyingBody: 'No current federal body tasked with this calculation',
+        currentStatus: 'The Indian Claims Commission (1946–1978) adjudicated 370 claims and paid approximately $1.3B. It was explicitly designed to finalize and extinguish claims, not to produce a full accounting. No federal agency is currently required to calculate or publish total uncompensated land cession figures.',
+        certified: false,
+        note: 'The Indian Claims Commission Act (1946) barred future claims for most historical land losses. The $1.3B in awards covered approximately 2% of tribal land area. Academic estimates of full compensation range from $250B to $500B+ in current dollars. No official figure exists because no official is required to produce one.'
+      },
+      {
+        label: 'MMIP — Missing and Murdered Indigenous People',
+        value: null,
+        unit: 'Not yet dollar-denominated',
+        source: 'Urban Indian Health Institute 2018; DOJ MMIP Review 2022; GAO 2021',
+        certifyingBody: 'DOJ / FBI — data collection incomplete',
+        currentStatus: 'Savanna\'s Act (2020) and the Not Invisible Act (2020) require DOJ and Interior to improve data collection and response. As of 2024, DOJ has acknowledged systemic data gaps. In 2016, NCIC recorded 5,712 MMIP cases; most received minimal federal investigation. The federal government has a trust responsibility to protect tribal members on federal and tribal land.',
+        certified: false,
+        note: 'Federal jurisdiction over crimes on tribal lands is fragmented among federal, tribal, and state authorities depending on offense, offender identity, and victim identity (Major Crimes Act, Public Law 280). GAO found in 2021 that DOJ lacks a consistent process to identify and track MMIP cases. The data does not exist in a form that can be dollar-denominated. That absence is itself the accountability failure.'
+      }
+    ],
+    accountability_gap: {
+      whoPublishes: 'BIA (partial budget data), IHS (healthcare gap), DOJ (some MMIP data). No agency publishes aggregate treaty obligation figures.',
+      whoAggregates: 'Nobody. No federal agency is required to aggregate or publish total treaty obligations.',
+      consequences_of_growth: 'None. The trust responsibility is established in law. Congress holds plenary power over Indian affairs and is not required by any court to fund obligations at any particular level (US v. Sioux Nation being the narrow exception, and that award remains unclaimed).',
+      lastCongressionalAction: 'Cobell settlement 2010. Savanna\'s Act 2020. Not Invisible Act 2020. Water rights settlements — fewer than 40 completed in 117 years.'
+    },
+    triggers: {
+      annualGrowth: { threshold: 3, currentGrowth: null, triggered: false },
+      specialStatus: 'Co-certification with tribal nations required before any official figure can be published'
+    }
+  },
+
+  // ── CAT V — REMEDIATION ──────────────────────────────────
+  {
+    id: 'remediation',
+    code: 'CAT-V',
+    name: 'Environmental Remediation',
+    icon: '☣️',
+    color: '#27ae60',
+    colorDim: 'rgba(39,174,96,0.15)',
+    unit: 'USD',
+    responsible: [
+      'EPA', 'Dept. of Interior', 'Army Corps of Engineers', 'Dept. of Defense'
+    ],
+    currentAccountability: 'EPA publishes the Superfund National Priorities List and cost estimates. DOD publishes PFAS cleanup plans. Interior publishes abandoned mine data. These are published obligations with known responsible parties — in many cases the federal government itself. The accountability gap is not data: it is funding. The Superfund tax lapsed in 1995 and was reinstated by the IRA in 2022 at a fraction of its original scope. The backlog grows faster than appropriations.',
+    legalBasis: 'CERCLA / Superfund (42 U.S.C. §9601); Clean Water Act; Resource Conservation and Recovery Act; PFAS Action Act (proposed, not passed); Surface Mining Control and Reclamation Act',
+    whatIsMissing: 'No law requires Congress to fund Superfund cleanup at a rate matching the documented backlog. EPA publishes the liability. Congress appropriates what it chooses. The NPL has grown every year since 1983. No official is personally liable for the growth of the backlog. The federal government is the responsible party at many Superfund sites and has used its sovereign immunity to limit its own cleanup liability.',
+    status: 'PUBLISHED — liability acknowledged, funding inadequate',
+    updateSchedule: 'Annual',
+    total: 1840,
+    trend: [1420, 1520, 1630, 1740, 1840],
+    trendYears: [2021, 2022, 2023, 2024, 2025],
+    entries: [
+      {
+        label: 'EPA Superfund National Priorities List — Unremediated Sites',
+        value: 580,
+        unit: '$B',
+        source: 'EPA Superfund Program Accomplishments 2023; GAO Superfund Review 2022',
+        certifyingBody: 'U.S. Environmental Protection Agency',
+        currentStatus: 'Published by EPA. The NPL currently includes approximately 1,341 sites with incomplete remediation. EPA\'s annual Superfund appropriation is approximately $1.3B — less than 0.25% of the documented backlog per year.',
+        certified: true,
+        note: 'At current appropriation rates, clearing the current NPL backlog would take over 400 years — before accounting for new additions. The Superfund excise tax was reinstated by the IRA (2022) at approximately $1.2B/year. The NPL backlog grows approximately $15–20B/year from new listings and cost increases.'
+      },
+      {
+        label: 'Abandoned Hardrock Mine Sites',
+        value: 500,
+        unit: '$B',
+        source: 'EPA Hardrock Mining Assessment 2024; GAO Abandoned Mine Lands 2020',
+        certifyingBody: 'EPA / Bureau of Land Management',
+        currentStatus: 'EPA estimates 500,000+ abandoned hardrock mines. The 1872 Mining Law does not require bond sufficient to cover cleanup costs. Federal reclamation authority over pre-1977 mines is limited. The General Mining Law of 1872 has never been comprehensively revised.',
+        certified: false,
+        note: 'The Gold King Mine spill (2015) released 3 million gallons of acid mine drainage into the Animas River. That was one incident among 500,000 sites. The federal government sued Colorado and others but settled without full cleanup funding. The 1872 Mining Law remains unchanged.'
+      },
+      {
+        label: 'PFAS Contamination — Federal Source Sites',
+        value: 400,
+        unit: '$B estimated',
+        source: 'DOD PFAS Cleanup Plan 2023; EPA PFAS Strategic Roadmap 2021–2024',
+        certifyingBody: 'Dept. of Defense / EPA',
+        currentStatus: 'DOD has identified 700+ military installations with known or suspected PFAS contamination. DOD\'s cleanup estimate is $3.4B for known bases — widely considered a significant undercount. EPA finalized the PFAS drinking water standard in 2024 (4 ppt for PFOA/PFOS). Compliance costs for water utilities are estimated at $772M–$1.5B/year.',
+        certified: false,
+        note: 'PFAS does not break down naturally. Federal facilities are the largest single source of PFAS contamination in the US. DOD used AFFF firefighting foam containing PFAS at military installations for decades. The government knew of PFAS health risks by the late 1990s. Full remediation liability has never been officially calculated.'
+      },
+      {
+        label: 'Federal Land Legacy Contamination (non-mining)',
+        value: 180,
+        unit: '$B',
+        source: 'Dept. of Interior Environmental Cleanup Program 2023',
+        certifyingBody: 'Dept. of Interior',
+        currentStatus: 'Published by Interior. Documented cleanup liability across BLM, NPS, BIA, and Fish & Wildlife lands. Interior\'s annual environmental cleanup appropriation is approximately $200M.',
+        certified: true,
+        note: ''
+      },
+      {
+        label: 'Tribal Land Contamination — Federal-Source',
+        value: 180,
+        unit: '$B estimated federal-source component',
+        source: 'EPA Environmental Justice Report 2022; BIA Environmental Cleanup 2023; DOE Navajo uranium assessments',
+        certifyingBody: 'EPA / BIA (disputed)',
+        currentStatus: 'Published in fragments. Many tribal land sites lack baseline environmental assessments. The federal government contracted uranium mining on Navajo Nation lands from 1944–1986 and left 521 documented abandoned uranium mines. EPA has cleaned 219 of 521 priority sites as of 2024.',
+        certified: false,
+        note: 'The Navajo Nation Radiation Exposure Compensation Act amendments (2024) expanded RECA coverage for affected communities. Uranium mine cleanup on Navajo lands is projected to cost $1B+ for the highest-priority sites alone. 302 mines remain unremediated.'
+      }
+    ],
+    accountability_gap: {
+      whoPublishes: 'EPA (Superfund), DOD (PFAS), Interior (federal lands), BLM (mining) — all separately.',
+      whoAggregates: 'Nobody. No federal agency publishes a unified environmental remediation liability.',
+      consequences_of_growth: 'None mandated. EPA publishes the NPL. Congress appropriates what it chooses. The backlog grows.',
+      lastCongressionalAction: 'Infrastructure Investment and Jobs Act 2021: $21B for environmental remediation, Superfund, and brownfields. Inflation Reduction Act 2022: Superfund excise tax reinstated at ~$1.2B/year.'
+    },
+    triggers: {
+      annualGrowth: { threshold: 3, currentGrowth: 5.7, triggered: true }
+    }
+  },
+
+  {
+    id: "reparations",
+    code: "CAT-VI",
+    name: "Reparations to Black Americans",
+    icon: "⚖️",
+    color: "#8e44ad",
+    colorDim: "rgba(142,68,173,0.15)",
+    unit: "USD",
+    responsible: [
+      "Congress — no designated agency exists",
+      "Dept. of the Treasury (if legislation passed)",
+      "Dept. of Justice (civil rights enforcement)"
+    ],
+    currentAccountability: "No federal agency is currently tasked with calculating, tracking, or reporting a reparations obligation. H.R. 40 — the Commission to Study Reparation Proposals for African Americans — has been introduced in every Congress since 1989. That is 35 consecutive years. It has never received a floor vote. No federal law currently acknowledges a reparations obligation, defines its scope, or assigns responsibility for its calculation. The data in this category is not disputed. The mechanism to respond to it does not exist.",
+    legalBasis: "No current federal reparations statute. Relevant precedents: Civil Liberties Act of 1988 (Japanese American internment — $20,000 per survivor, $1.6B total); Rosewood Claims Act 1994 (FL, $2.1M); H.R. 40 introduced every Congress since 1989, never passed. Constitutional basis cited by proponents: 13th Amendment, 14th Amendment Equal Protection Clause, Civil Rights Act of 1866.",
+    whatIsMissing: "No federal body is required to calculate the obligation. No methodology has been authorized. No agency has been tasked with producing a figure. The absence of a number is not evidence the obligation does not exist. It is evidence that no one in the federal government is required to produce one. H.R. 40 — the bill that would merely authorize a commission to study the question — has been declined for 35 consecutive years. This entry documents that absence.",
+    status: "NOT PUBLISHED — no federal obligation figure exists",
+    updateSchedule: "Not applicable — no federal reporting mechanism exists",
+    lastUpdate: "No federal figure has ever been published",
+    entries: [
+      {
+        label: "Duration of Chattel Slavery Under US Law",
+        value: 246,
+        unit: "years — 1619 to 1865",
+        source: "Historical record; 13th Amendment ratified December 6, 1865; National Archives",
+        certifyingBody: "National Archives / Library of Congress",
+        currentStatus: "Not a contested figure. The federal government legally sanctioned and constitutionally protected the institution of chattel slavery for 246 years. The original Constitution counted enslaved persons as three-fifths of a person for apportionment. Congress passed and presidents enforced the Fugitive Slave Acts of 1793 and 1850, requiring return of escaped enslaved people from free states. The federal government did not enslave people directly — it built the legal architecture that made enslavement profitable and permanent.",
+        certified: true,
+        note: ""
+      },
+      {
+        label: "The Broken Promise: 40 Acres (Special Field Order No. 15, 1865)",
+        value: null,
+        unit: "Promise made and rescinded within one year — land returned to former enslavers",
+        source: "Special Field Order No. 15, Gen. William T. Sherman, January 16, 1865; Presidential Proclamation rescinding it, President Andrew Johnson, August 1865; National Archives; Henry Louis Gates Jr., The Root, 2013",
+        certifyingBody: "National Archives — no current federal body calculates the obligation",
+        currentStatus: "General Sherman's Field Order No. 15 distributed approximately 400,000 acres of confiscated Confederate land to freed Black families along the South Carolina, Georgia, and Florida coasts — roughly 40 acres per family for an estimated 40,000 people. President Andrew Johnson rescinded the order in August 1865 and returned the land to former Confederate landowners. The federal government made this promise and broke it within the same calendar year. No compensation for this broken promise has ever been made.",
+        certified: true,
+        note: "400,000 acres redistributed back to former enslavers. The labor that built those estates was never compensated. The land that was briefly distributed was taken back by executive order. This is not a contested historical interpretation. It is documented federal action on the public record."
+      },
+      {
+        label: "The Freedmen's Bureau Bank Failure — Federal Mismanagement",
+        value: 3000,
+        unit: "$B estimated in 2024 dollars (depositor losses + compound interest)",
+        source: "Abby Scher and Tanya Clay House, Broken Promises: The Freedmen's Savings Bank, 2023; Congressional Research Service; National Archives Freedmen's Bureau records; Senate bill S.1706 (2023)",
+        certifyingBody: "National Archives (records) — no current federal body calculates the obligation",
+        currentStatus: "The Freedmen's Savings and Trust Company, chartered by Congress in 1865, collapsed in 1874 after systematic mismanagement and looting by its white trustees. Approximately 61,000 Black depositors — many of them recently freed — lost their savings. Congress paid depositors 62 cents on the dollar and stopped. The federal government chartered the bank, failed to regulate it, and compensated depositors for a fraction of their losses. A 2023 Senate bill proposed a study commission for depositor descendants. It did not pass.",
+        certified: false,
+        note: "The federal government created the only federally chartered bank designed to serve freed Black Americans. It failed to regulate it. It compensated losses at 62 cents on the dollar and stopped. This is documented congressional action, not contested interpretation."
+      },
+      {
+        label: "Economic Value of Enslaved Labor — Academic Estimates",
+        value: 14000000,
+        unit: "$B (range: $14T to $100T+ depending on methodology)",
+        source: "Thomas Craemer, Estimating Slavery Reparations, Social Science Quarterly, 2015; William Darity Jr. and Kirsten Mullen, From Here to Equality, 2020; Thomas Shapiro, The Hidden Cost of Being African American, 2004",
+        certifyingBody: "Academic — no federal calculation has been authorized",
+        currentStatus: "No official federal estimate exists. Academic estimates range from $14 trillion on a wages-owed basis to over $100 trillion accounting for compound interest on stolen labor over generations. The Darity-Mullen calculation — the most cited in current policy literature — arrives at approximately $14 trillion for direct descendants of enslaved persons. No congressional body has been authorized to produce a methodology or a figure. H.R. 40 would have created that commission. It has not passed in 35 years.",
+        certified: false,
+        note: "PROVISIONAL — academic range only. No federal methodology has been authorized. The range reflects genuine methodological differences: whether to calculate wages owed, profits extracted, compound interest, or multigenerational wealth gap. The commission H.R. 40 would create exists specifically to resolve this methodological question. It has not been created."
+      },
+      {
+        label: "GI Bill Exclusion — Post-WWII Wealth Gap Contribution",
+        value: 640,
+        unit: "$B estimated contribution to racial wealth gap (2024 dollars)",
+        source: "Ira Katznelson, When Affirmative Action Was White, 2005; Hilary Herbold, Never a Level Playing Field: Blacks and the GI Bill, Journal of Blacks in Higher Education, 1994; Dept. of Veterans Affairs historical records",
+        certifyingBody: "Dept. of Veterans Affairs (records) — no current federal calculation exists",
+        currentStatus: "The Servicemen's Readjustment Act of 1944 was administered by Southern Democrats who ensured Black veterans were systematically excluded from homeownership loans, college admissions, and business loans. Of the first 67,000 mortgages issued under the GI Bill in New York and New Jersey, fewer than 100 went to non-white veterans. The federal government designed a wealth-building program and enforced its discriminatory administration. No compensation or corrective program has been enacted to address this documented gap.",
+        certified: false,
+        note: "The GI Bill exclusion is among the most documented mechanisms producing the post-WWII racial wealth gap. The federal government designed the program, funded it, and enforced the discrimination. No current federal law acknowledges this as an unmet obligation."
+      },
+      {
+        label: "Current Racial Wealth Gap — Documented Federal Policy Contribution",
+        value: null,
+        unit: "Median white family: $188,200 — Median Black family: $24,100 (Federal Reserve 2019)",
+        source: "Federal Reserve Survey of Consumer Finances, 2019; Brookings Institution, Examining the Black-white wealth gap, 2020; William Darity Jr. and Kirsten Mullen, From Here to Equality, 2020",
+        certifyingBody: "Federal Reserve (wealth data) — no federal body calculates the policy-attributable share",
+        currentStatus: "The Federal Reserve publishes racial wealth data. The gap is documented by official federal statistics. The causal connection between specific federal policies — chattel slavery, the Reconstruction betrayal, redlining administered by the FHA, discriminatory GI Bill administration, urban renewal displacement — and the current gap is established in peer-reviewed economic literature. What does not exist is any federal body required to calculate the government's specific contribution to the gap, assign a dollar value to it, or report it publicly.",
+        certified: true,
+        note: "The wealth gap figures are from official federal data (Federal Reserve Survey of Consumer Finances). The causal attribution to federal policy is from peer-reviewed academic literature. The federal government publishes the outcome. It has not been required to calculate its responsibility for producing it."
+      },
+      {
+        label: "H.R. 40 — 35 Years Without a Floor Vote",
+        value: null,
+        unit: "35 consecutive Congresses introduced — 0 floor votes",
+        source: "Congress.gov: H.R. 40 introduced in every Congress from 101st (1989) through 119th (2025); GovTrack legislative history; House Judiciary Committee vote April 2021",
+        certifyingBody: "Congress.gov (legislative record)",
+        currentStatus: "H.R. 40, the Commission to Study Reparation Proposals for African Americans, was first introduced by Rep. John Conyers in 1989. It has been reintroduced in every Congress since — 35 years. The bill does not authorize reparations. It authorizes a commission to study whether reparations are appropriate and what form they might take. It passed the House Judiciary Committee for the first time in April 2021. It was not brought to the House floor. The 118th and 119th Congresses have not advanced it.",
+        certified: true,
+        note: "The federal government has declined for 35 consecutive years to study the question of reparations. Not to pay reparations. To study them. The bill that has never received a floor vote does not ask for a dollar. It asks for a commission."
+      }
+    ],
+    accountability_gap: {
+      whoPublishes: "No federal agency publishes a reparations obligation figure. The Federal Reserve publishes racial wealth data. The National Archives holds the Freedmen's Bureau records. The Congressional Research Service has produced background reports. None of these constitute an acknowledged federal obligation.",
+      whoAggregates: "Nobody. No federal law requires any agency to calculate, aggregate, or publish a reparations obligation figure.",
+      consequences_of_growth: "None. The racial wealth gap documented by the Federal Reserve persists and in some cycles widens. No mechanism requires any federal response. H.R. 40 has not passed in 35 years.",
+      lastCongressionalAction: "H.R. 40 passed House Judiciary Committee, April 2021 (117th Congress). Not brought to House floor. Not advanced in 118th or 119th Congress."
+    },
+    triggers: {
+      annualGrowth: { threshold: 3, currentGrowth: null, triggered: false },
+      specialStatus: "No federal figure exists to measure growth against. The obligation is documented in the historical record and in federal data. The measurement mechanism does not exist."
+    }
+  }
+
+];
+
+
+// ═══════════════════════════════════════════════════════════
+// NATIONAL LEDGER — APPLICATION v2
+// Current governance framing — existing US law only
+// ═══════════════════════════════════════════════════════════
+
+let activeCategory = null;
+let liveData = {};
+
+function getKey() { return localStorage.getItem('ledger_key') || ''; }
+function setKey(k) { localStorage.setItem('ledger_key', k.trim()); }
+
+function showKeyModal() {
+  document.getElementById('keyInp').value = getKey();
+  document.getElementById('keyModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('keyInp').focus(), 100);
+}
+function closeKeyModal() { document.getElementById('keyModal').style.display = 'none'; }
+function saveKey() {
+  const v = document.getElementById('keyInp').value.trim();
+  if (!v || !v.startsWith('sk-ant-')) {
+    document.getElementById('keyInp').style.borderColor = '#a01818';
+    return;
+  }
+  setKey(v); closeKeyModal(); updateKeyBtn();
+}
+function updateKeyBtn() {
+  const b = document.getElementById('keyBtn');
+  if (!b) return;
+  if (getKey()) { b.textContent = '⚙ Key ✓'; b.classList.add('has-key'); }
+  else { b.textContent = '⚙ API Key'; b.classList.remove('has-key'); }
+}
+
+// ── Claude API ──────────────────────────────────────────────
+async function callClaude(query) {
+  const key = getKey();
+  if (!key) { showKeyModal(); throw new Error('API key required.'); }
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-beta': 'web-search-2025-03-05'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6', max_tokens: 1800,
+      system: `You are a nonpartisan research assistant focused on US government accountability and deferred public obligations. Answer questions about the actual current state of federal obligations: national debt, unfunded entitlements, climate costs, water depletion, Indigenous treaty rights, and environmental remediation. Cite primary sources: CBO, SSA, NOAA, USGS, EPA, GAO, BIA, Treasury. Be specific about dollar figures, dates, and what accountability mechanisms do and do not exist under current law. Do not reference proposed legislation or hypothetical governance reforms. Current year: 2026. Use ### headers and **bold** key facts.`,
+      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+      messages: [{ role: 'user', content: query }]
+    })
+  });
+  if (!resp.ok) {
+    const e = await resp.json().catch(() => ({}));
+    if (resp.status === 401) { localStorage.removeItem('ledger_key'); updateKeyBtn(); showKeyModal(); throw new Error('Invalid key.'); }
+    throw new Error(e.error?.message || `API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.content.filter(b => b.type === 'text').map(b => b.text).join('\n') || 'No response.';
+}
+
+function md2html(t) {
+  return t
+    .replace(/^###\s+(.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\$[\d,.]+[BMTKtk]?/g, '<span class="fig">$&</span>')
+    .replace(/^[-*]\s+(.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/gs, m => `<ul>${m}</ul>`)
+    .split('\n').map(l => { l = l.trim(); if (!l || l.startsWith('<')) return l; return `<p>${l}</p>`; }).join('\n');
+}
+
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function fmtDollars(v) {
+  if (v == null) return '—';
+  if (v >= 1e6) return `$${(v/1e6).toFixed(1)}Q`;
+  if (v >= 1e3) return `$${(v/1e3).toFixed(1)}T`;
+  return `$${v.toFixed(0)}B`;
+}
+function fmtShort(v, unit) {
+  if (v == null) return 'Unquantified';
+  if (unit === '$B') return fmtDollars(v);
+  if (unit && unit.includes('acre-feet')) return v.toLocaleString() + ' acre-ft/yr';
+  if (unit && unit.includes('°C')) return v + '°C locked in';
+  return v + (unit ? ' ' + unit : '');
+}
+
+// ── Live APIs ───────────────────────────────────────────────
+async function fetchLiveData() {
+  // Treasury national debt
+  try {
+    const r = await fetch('https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/debt_to_penny?fields=record_date,tot_pub_debt_out_amt&sort=-record_date&limit=1');
+    const d = await r.json();
+    if (d.data?.[0]) {
+      liveData.nationalDebt = parseFloat(d.data[0].tot_pub_debt_out_amt) / 1e9;
+      liveData.debtDate = d.data[0].record_date;
+      setLive('debt-live', `$${(liveData.nationalDebt/1e3).toFixed(2)}T as of ${liveData.debtDate}`, 'Treasury FiscalData');
+      setLive('debt-live-2', `$${(liveData.nationalDebt/1e3).toFixed(2)}T`, liveData.debtDate);
+    }
+  } catch(e) {}
+
+  // USASpending DOD
+  try {
+    const r = await fetch('https://api.usaspending.gov/api/v2/agency/097/budgetary_resources/?fiscal_year=2025');
+    const d = await r.json();
+    const ob = d.agency_data_by_year?.[0]?.agency_total_obligated;
+    if (ob) {
+      liveData.dodObligated = ob / 1e9;
+      setLive('dod-live', `$${liveData.dodObligated.toFixed(0)}B obligated FY2025`, 'USASpending.gov');
+    }
+  } catch(e) {}
+
+  // USGS Ogallala
+  try {
+    const r = await fetch('https://waterservices.usgs.gov/nwis/gwlevels/?format=json&sites=382102100583401&period=P30D&siteType=GW');
+    const d = await r.json();
+    const vals = d.value?.timeSeries?.[0]?.values?.[0]?.value;
+    if (vals?.length) {
+      liveData.ogallalaLevel = parseFloat(vals[vals.length-1].value);
+      liveData.ogallalaDate = vals[vals.length-1].dateTime?.split('T')[0];
+      setLive('ogallala-live', `${liveData.ogallalaLevel.toFixed(1)} ft below surface`, liveData.ogallalaDate + ' · KS rep. well');
+      setLive('ogallala-live-2', `${liveData.ogallalaLevel.toFixed(1)} ft`, liveData.ogallalaDate);
+    }
+  } catch(e) {}
+}
+
+function setLive(id, value, source) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = `<span class="live-dot"></span><strong>${esc(value)}</strong><span class="live-src">${esc(source)} · live</span>`;
+  el.classList.add('live-loaded');
+}
+
+// ── Accountability gap bar ──────────────────────────────────
+function renderAccGap(cat) {
+  const g = cat.accountability_gap;
+  if (!g) return '';
+  return `<div class="acc-gap">
+    <div class="acc-gap-header">⚠ Accountability Gap — Current System</div>
+    <div class="acc-gap-row"><span class="acc-label">Who publishes:</span><span>${esc(g.whoPublishes)}</span></div>
+    <div class="acc-gap-row"><span class="acc-label">Who aggregates:</span><span class="acc-void">${esc(g.whoAggregates)}</span></div>
+    <div class="acc-gap-row"><span class="acc-label">When this grows:</span><span class="acc-void">${esc(g.consequences_of_growth)}</span></div>
+    <div class="acc-gap-row"><span class="acc-label">Last action:</span><span>${esc(g.lastCongressionalAction)}</span></div>
+  </div>`;
+}
+
+// ── Trigger strip ───────────────────────────────────────────
+function renderTriggers() {
+  const el = document.getElementById('triggerStrip');
+  if (!el) return;
+  const fired = LEDGER_CATEGORIES.filter(c => c.triggers?.annualGrowth?.triggered);
+  if (!fired.length) {
+    el.innerHTML = '<span style="color:var(--green-lit)">No categories growing above 3%/yr</span>';
+    return;
+  }
+  el.innerHTML = fired.map(c =>
+    `<span class="trig-chip">${c.code}: +${c.triggers.annualGrowth.currentGrowth}%/yr — growing faster than documented response capacity</span>`
+  ).join('');
+}
+
+// ── Category cards ──────────────────────────────────────────
+function renderCards() {
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = LEDGER_CATEGORIES.map(cat => {
+    const g = cat.triggers?.annualGrowth?.currentGrowth;
+    const fired = cat.triggers?.annualGrowth?.triggered;
+    return `<div class="cat-card ${fired ? 'cat-warn' : ''}" onclick="openCategory('${cat.id}')">
+      <div class="cat-top">
+        <span class="cat-icon">${cat.icon}</span>
+        <span class="cat-code" style="color:${cat.color}">${cat.code}</span>
+        <span class="cat-status-chip ${cat.status.includes('PUBLISHED') ? 'stat-pub' : 'stat-partial'}">${cat.status.split('—')[0].trim()}</span>
+      </div>
+      <div class="cat-name">${esc(cat.name)}</div>
+      <div class="cat-fig" style="color:${cat.color}">${cat.total ? fmtDollars(cat.total) : 'Partially quantified'}</div>
+      ${cat.id === 'fiscal' ? `<div class="cat-live" id="debt-live"><span class="live-dot pulsing"></span> Loading live debt…</div>` : ''}
+      ${cat.id === 'water' ? `<div class="cat-live" id="ogallala-live"><span class="live-dot pulsing"></span> Loading USGS data…</div>` : ''}
+      <div class="cat-spark">${sparkline(cat)}</div>
+      <div class="cat-foot">
+        ${g != null ? `<span style="color:${fired ? 'var(--orange)' : 'var(--text-dim)'}">↑ ${g}%/yr</span>` : ''}
+        <span class="cat-agency-chip">${esc(cat.responsible[0])}</span>
+      </div>
+      <div class="cat-void">No aggregation mechanism exists</div>
+    </div>`;
+  }).join('');
+}
+
+function sparkline(cat) {
+  if (!cat.trend?.length) return '';
+  const max = Math.max(...cat.trend), min = Math.min(...cat.trend);
+  const r = max - min || 1;
+  const W = 130, H = 32;
+  const pts = cat.trend.map((v,i) => {
+    const x = (i / (cat.trend.length-1)) * W;
+    const y = H - ((v - min) / r) * (H-6) - 3;
+    return `${x},${y}`;
+  }).join(' ');
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+    <polyline points="${pts}" fill="none" stroke="${cat.color}" stroke-width="1.8"/>
+    <circle cx="${W}" cy="${parseFloat(pts.split(' ').pop().split(',')[1])}" r="2.5" fill="${cat.color}"/>
+  </svg>`;
+}
+
+// ── Detail view ─────────────────────────────────────────────
+function openCategory(id) {
+  activeCategory = id;
+  const cat = LEDGER_CATEGORIES.find(c => c.id === id);
+  if (!cat) return;
+
+  document.getElementById('catGrid').style.display = 'none';
+  document.getElementById('globalAiWrap').style.display = 'none';
+  const panel = document.getElementById('detailPanel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const g = cat.triggers?.annualGrowth;
+
+  panel.innerHTML = `
+    <button class="back-btn" onclick="closeDetail()">← All Categories</button>
+
+    <div class="det-hero" style="border-left:4px solid ${cat.color}">
+      <div class="det-top">
+        <span class="cat-icon" style="font-size:1.5rem">${cat.icon}</span>
+        <div>
+          <div style="font-family:var(--display);font-size:1.3rem;letter-spacing:.02em;color:${cat.color}">${cat.code} — ${esc(cat.name)}</div>
+          <div style="font-family:var(--mono);font-size:.58rem;color:var(--text-dim);margin-top:.1rem">Update schedule: ${esc(cat.updateSchedule)}</div>
+        </div>
+        <span class="cat-status-chip ${cat.status.includes('PUBLISHED') ? 'stat-pub' : 'stat-partial'}" style="margin-left:auto">${esc(cat.status.split('—')[0].trim())}</span>
+      </div>
+      <div class="det-meta">
+        <span>📋 Responsible agencies: ${esc(cat.responsible.join(' · '))}</span>
+      </div>
+      <div class="det-legal">
+        <span class="det-lbl">Legal basis (current law):</span> ${esc(cat.legalBasis)}
+      </div>
+      ${cat.id === 'fiscal' ? `<div class="live-row" id="debt-live-2"><span class="live-dot pulsing"></span> Loading Treasury live data…</div>` : ''}
+      ${cat.id === 'water' ? `<div class="live-row" id="ogallala-live-2"><span class="live-dot pulsing"></span> Loading USGS live data…</div>` : ''}
+    </div>
+
+    <div class="det-current-acc">
+      <div class="det-acc-hdr">Current Accountability Structure</div>
+      <p>${esc(cat.currentAccountability)}</p>
+    </div>
+
+    <div class="det-missing">
+      <div class="det-miss-hdr">⚠ What Is Missing</div>
+      <p>${esc(cat.whatIsMissing)}</p>
+    </div>
+
+    ${cat.total ? `<div class="det-total">
+      <div style="font-family:var(--mono);font-size:.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem">Total Documented Obligation</div>
+      <div style="font-family:var(--display);font-size:2rem;color:${cat.color};letter-spacing:.02em">${fmtDollars(cat.total)}</div>
+      ${cat.trend ? trendChart(cat) : ''}
+    </div>` : ''}
+
+    <div class="entries-hdr">Ledger Entries</div>
+    <div class="entries-list">
+      ${cat.entries.map(e => `<div class="entry">
+        <div class="entry-top">
+          <div class="entry-label">${esc(e.label)}</div>
+          <div class="entry-val ${e.value == null ? 'val-unknown' : ''}" style="color:${cat.color}">
+            ${e.value != null ? esc(fmtShort(e.value, e.unit)) : '⚠ Unquantified'}
+          </div>
+        </div>
+        ${e.unit && e.value != null && e.unit !== '$B' && e.unit !== 'multi' ?
+          `<div class="entry-unit">${esc(e.unit)}</div>` : ''}
+        <div class="entry-body-row"><span class="ebr-lbl">Source:</span> ${esc(e.source)}</div>
+        <div class="entry-body-row"><span class="ebr-lbl">Certifying body:</span> ${esc(e.certifyingBody)}</div>
+        <div class="entry-body-row"><span class="ebr-lbl">Current status:</span> ${esc(e.currentStatus)}</div>
+        ${e.note ? `<div class="entry-note">${esc(e.note)}</div>` : ''}
+        <div class="entry-cert-row">
+          <span class="cert-chip ${e.certified ? 'cert-y' : 'cert-n'}">${e.certified ? '✓ Published by responsible agency' : '◯ No official aggregate figure'}</span>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    ${renderAccGap(cat)}
+
+    ${g ? `<div class="growth-row ${g.triggered ? 'growth-warn' : ''}">
+      <div class="growth-label">Annual growth rate: <strong style="color:${g.triggered ? 'var(--orange)' : 'var(--text)'}">${g.currentGrowth != null ? g.currentGrowth + '%/yr' : 'Not yet calculated'}</strong></div>
+      ${g.triggered ? `<div class="growth-note">This category is growing faster than any documented response capacity. Under current law, no mechanism requires Congress to acknowledge this growth rate or produce a response plan. The data is published. Action remains optional.</div>` : ''}
+    </div>` : ''}
+
+    <div class="ai-block">
+      <div class="ai-block-hdr">🔍 Research — ${esc(cat.name)}</div>
+      <div class="ai-row">
+        <textarea id="aiQ" class="ai-ta" rows="2"
+          placeholder="Ask about current law, agency reports, recent developments, or the accountability gap in this category…"></textarea>
+        <button class="ai-btn" onclick="runCatAI('${cat.id}')">Search →</button>
+      </div>
+      <div id="aiOut"></div>
+      <div class="quick-row">
+        ${[
+          'What does current law require the government to do about this?',
+          'What is the most recent official estimate of this obligation?',
+          'What enforcement mechanisms currently exist?',
+          'What has Congress done about this in the past five years?'
+        ].map(q => `<button class="quick-btn" onclick="setQ(${JSON.stringify(q + ' Regarding: ' + cat.name)})">${q}</button>`).join('')}
+      </div>
+    </div>`;
+
+  // Populate live data in detail view
+  if (liveData.nationalDebt && cat.id === 'fiscal')
+    setLive('debt-live-2', `$${(liveData.nationalDebt/1e3).toFixed(2)}T`, liveData.debtDate);
+  if (liveData.ogallalaLevel && cat.id === 'water')
+    setLive('ogallala-live-2', `${liveData.ogallalaLevel.toFixed(1)} ft below surface`, liveData.ogallalaDate + ' · KS rep. well');
+}
+
+function trendChart(cat) {
+  const max = Math.max(...cat.trend), min = Math.min(...cat.trend);
+  const r = max - min || 1;
+  const W = 380, H = 72;
+  const pts = cat.trend.map((v, i) => {
+    const x = 40 + (i / (cat.trend.length-1)) * (W - 60);
+    const y = H - 18 - ((v - min) / r) * (H - 30);
+    return { x, y, v, yr: cat.trendYears[i] };
+  });
+  const poly = pts.map(p => `${p.x},${p.y}`).join(' ');
+  return `<div style="overflow-x:auto;margin-top:.75rem">
+  <svg viewBox="0 0 ${W} ${H+18}" width="100%" style="max-width:${W}px">
+    <polyline points="${poly}" fill="none" stroke="${cat.color}" stroke-width="2.5"/>
+    ${pts.map(p => `
+      <circle cx="${p.x}" cy="${p.y}" r="4" fill="${cat.color}"/>
+      <text x="${p.x}" y="${p.y-8}" text-anchor="middle" font-size="9" fill="${cat.color}">${fmtDollars(p.v)}</text>
+      <text x="${p.x}" y="${H+14}" text-anchor="middle" font-size="9" fill="var(--text-dim)">${p.yr}</text>`).join('')}
+  </svg></div>`;
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').style.display = 'none';
+  document.getElementById('catGrid').style.display = 'grid';
+  document.getElementById('globalAiWrap').style.display = 'block';
+  activeCategory = null;
+}
+
+// ── AI ──────────────────────────────────────────────────────
+async function runCatAI(catId) {
+  const cat = LEDGER_CATEGORIES.find(c => c.id === catId);
+  const q = document.getElementById('aiQ').value.trim();
+  if (!q) return;
+  const out = document.getElementById('aiOut');
+  out.innerHTML = `<div class="loading"><div class="spin"></div> Searching agency reports and public records…</div>`;
+  try {
+    const result = await callClaude(`Category: ${cat.name}. ${q}`);
+    out.innerHTML = `<div class="ai-res">${md2html(result)}</div>`;
+  } catch(e) {
+    out.innerHTML = `<div class="ai-err">⚠ ${esc(e.message)}</div>`;
+  }
+}
+
+async function runGlobalAI() {
+  const q = document.getElementById('globalQ').value.trim();
+  if (!q) return;
+  const out = document.getElementById('globalOut');
+  out.innerHTML = `<div class="loading"><div class="spin"></div> Searching…</div>`;
+  out.scrollIntoView({ behavior: 'smooth' });
+  try {
+    out.innerHTML = `<div class="ai-res">${md2html(await callClaude(q))}</div>`;
+  } catch(e) {
+    out.innerHTML = `<div class="ai-err">⚠ ${esc(e.message)}</div>`;
+  }
+}
+
+function setQ(q) {
+  document.getElementById('aiQ').value = q;
+  runCatAI(activeCategory);
+}
+
+// ── Aggregate ───────────────────────────────────────────────
+function renderAggregates() {
+  const quantified = LEDGER_CATEGORIES.filter(c => c.total != null);
+  const total = quantified.reduce((s, c) => s + c.total, 0);
+  const pctGdp = (total / LEDGER_META.gdp * 100).toFixed(0);
+
+  document.getElementById('aggTotal').textContent = fmtDollars(total);
+  document.getElementById('aggGdp').textContent = pctGdp + '% of GDP';
+  document.getElementById('aggNote').textContent =
+    'Cat. IV (Treaty) and portions of Cat. II–III unquantified — actual total is materially higher';
+
+  const pct = Math.min((total / LEDGER_META.gdp / 1.5) * 100, 115);
+  const color = pct > 100 ? 'var(--red-lit)' : pct > 70 ? 'var(--orange)' : 'var(--green-lit)';
+  document.getElementById('aggBar').innerHTML = `
+    <div style="position:relative;background:var(--bg3);height:8px;border-radius:3px;overflow:hidden">
+      <div style="width:${Math.min(pct,100)}%;height:100%;background:${color};border-radius:3px"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.55rem;color:var(--text-dim);margin-top:3px">
+      <span>$0</span><span>Documented only (Cat. IV unquantified)</span><span>${fmtDollars(total)}</span>
+    </div>`;
+}
+
+// ── Init ────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('keyInp')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveKey();
+    document.getElementById('keyInp').style.borderColor = '';
+  });
+  document.getElementById('globalQ')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); runGlobalAI(); }
+  });
+  updateKeyBtn();
+  renderCards();
+  renderTriggers();
+  renderAggregates();
+  fetchLiveData();
+  // Open specific category if linked from Public Record sidebar
+  const hash = window.location.hash.replace('#','');
+  if(hash && LEDGER_CATEGORIES.find(c=>c.id===hash)){
+    setTimeout(()=>openCategory(hash), 300);
+  }
+});
+
+</script>
+</body>
+</html>
